@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fastadmin-cms模板标签快速替换且复制</title>
+    <meta name="author" content="xslooi"/>
+    <meta name="copyright" content="xslooi"/>
+    <!--自定义css-->
+    <link rel="stylesheet" type="text/css" href="style/css/main.css" />
+    <!--jquery库文件-->
+    <script type="text/javascript" src="style/js/jquery-1.12.4.min.js"></script>
+    <!--复制剪切板js-->
+    <script type="text/javascript" src="style/js/clipboard/clipboard.min.js"></script>
+    <!--layer弹出js-->
+    <script type="text/javascript" src="style/layer/layer.js"></script>
+    <!--自定义js-->
+    <script type="text/javascript" src="style/js/main.js"></script>
+
+</head>
+<body>
+<form name="mainForm" id="mainForm">
+    <fieldset>
+        <legend>源代码输入框</legend>
+        <div id="inputSourceCodeBox">
+            <textarea name="sourcebox" id="sourcebox" placeholder="请输入或粘贴需要替换的网页源代码（需要Fastadmin-cms标签替换的部分）
+如：
+&#x3C;&#x64;&#x69;&#x76;&#x20;&#x63;&#x6C;&#x61;&#x73;&#x73;&#x3D;&#x22;&#x63;&#x6F;&#x6E;&#x74;&#x61;&#x69;&#x6E;&#x65;&#x72;&#x22;&#x3E;
+&#x20;&#x20;&#x20;&#x20;&#x3C;&#x61;&#x20;&#x68;&#x72;&#x65;&#x66;&#x3D;&#x22;&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x62;&#x61;&#x69;&#x64;&#x75;&#x2E;&#x63;&#x6F;&#x6D;&#x22;&#x20;&#x74;&#x69;&#x74;&#x6C;&#x65;&#x3D;&#x22;&#x767E;&#x5EA6;&#x4E00;&#x4E0B;&#x22;&#x3E;
+&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x20;&#x3C;&#x69;&#x6D;&#x67;&#x20;&#x73;&#x72;&#x63;&#x3D;&#x22;&#x68;&#x74;&#x74;&#x70;&#x3A;&#x2F;&#x2F;&#x77;&#x77;&#x77;&#x2E;&#x62;&#x61;&#x69;&#x64;&#x75;&#x2E;&#x63;&#x6F;&#x6D;&#x2F;&#x6C;&#x6F;&#x67;&#x6F;&#x2E;&#x70;&#x6E;&#x67;&#x22;&#x20;&#x61;&#x6C;&#x74;&#x3D;&#x22;&#x767E;&#x5EA6;&#x4E00;&#x4E0B;&#x22;&#x3E;
+&#x20;&#x20;&#x20;&#x20;&#x3C;&#x2F;&#x61;&#x3E;
+&#x20;&#x20;&#x20;&#x20;&#x3C;&#x62;&#x3E;&#x767E;&#x5EA6;&#x4E00;&#x4E0B;&#x3C;&#x2F;&#x62;&#x3E;
+&#x3C;&#x2F;&#x64;&#x69;&#x76;&#x3E;"></textarea>
+        </div>
+        <div id="syntaxhighlighterBox"></div>
+    </fieldset>
+
+    <fieldset>
+        <legend>操作状态栏</legend>
+        <div id="msgBoxContainer">
+                <b style="color: lightslategray;">暂无操作</b>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>控制按钮面板</legend>
+
+        <div class="controllerRow">
+            <label>标签版本：</label>
+            <input id="platform_pc" type="radio" name="platform" value="pc" checked="checked">
+            <label class="selected" for="platform_pc">电脑版</label>
+            <input id="platform_wap" type="radio" name="platform" value="wap">
+            <label for="platform_wap">手机版</label>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <button class="button" value="analysis_nav" type="button"> 分析导航列表 </button>
+            <button class="button" value="analysis_navtree" type="button"> 分析导航结构 </button>
+
+        </div>
+        <div class="controllerRow">
+             <label>公共页标签：</label>
+             <button class="btn" data-clipboard-target="#sourcebox" value="arclist" type="button"> arclist </button>
+             <button class="btn" data-clipboard-target="#sourcebox" value="arclistimage" type="button"> arclistImage </button>
+             <button class="btn" data-clipboard-target="#sourcebox" value="channellist_one" type="button"> channellistOne </button>
+             <button class="fixed" data-clipboard-text="{include file='common/header' /}" type="button"> header.html </button>
+             <button class="fixed" data-clipboard-text="{include file='common/footer' /}" type="button"> footer.html </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.sitecopyright'/}" type="button"> 版权 </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.icp_license'/}" type="button"> 备案 </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.contact_tel'/}" type="button"> 电话 </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.contact_phone'/}" type="button"> 手机 </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.contactqq'/}" type="button"> QQ </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.contact_email'/}" type="button"> 邮箱 </button>
+             <button class="fixed" data-clipboard-text="{cms:config name='cms.contact_address'/}" type="button"> 地址 </button>
+             <button class="fixed_html" value="index_sql" type="button"> 首页SQL </button>
+             <button class="fixed_html" value="jump_wap" type="button"> 跳转手机JS </button>
+            <button class="fixed" data-clipboard-text="{$i}" type="button"> 从1递增 </button>
+            <button class="fixed" data-clipboard-text="{php}echo $i-1;{/php}" type="button"> 从0递增 </button>
+            <button class="fixed" data-clipboard-text="{if 1==$i}active{/if}" type="button"> 递增第一属性 </button>
+            <button class="fixed" data-clipboard-text="{if 1!=$i && 0==($i-1)%2}odd{else}even{/if}" type="button"> 递增求余属性 </button>
+            <button class="fixed" data-clipboard-text="http://beian.miit.gov.cn" type="button"> 备案网址 </button>
+
+        </div>
+        <div class="controllerRow">
+            <label>封面页标签：</label>
+            <button class="btn" data-clipboard-target="#sourcebox" value="channellist_typeid" type="button"> channellistTypeid </button>
+
+            <button class="btn" data-clipboard-target="#sourcebox" value="blocklist_images" type="button"> blocklist大图 </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="channellist_top" type="button"> channellistTop </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="channellist_nav" type="button"> channellistNav </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="channellist_navson" type="button"> channellistNavSon </button>
+            <button class="fixed" data-clipboard-text="{if $nav->is_active} on{/if}" type="button"> Nav当前项 </button>
+            <button class="fixed" data-clipboard-text="{if $nav.has_child}HTML{/if}" type="button"> NavHasChild </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="breadcrumb" type="button"> breadcrumb面包屑 </button>
+
+            <button class="fixed" data-clipboard-text="{cms:block name='inside_left_contact' /}" type="button"> 内部联系block </button>
+            <button class="fixed" data-clipboard-text="{cms:page name='title' /}" type="button"> 单页标题 </button>
+            <button class="fixed" data-clipboard-text="{cms:page name='content' /}" type="button"> 单页内容 </button>
+
+            <button class="fixed_html" value="search_keyword" type="button"> 搜索Keyword </button>
+            <button class="fixed" data-clipboard-text="{:addon_url('cms/search/index')}" type="button"> 搜索URL </button>
+            <button class="fixed" data-clipboard-text="{:token('__searchtoken__')}" type="button"> 搜索Token </button>
+
+        </div>
+        <div class="controllerRow">
+            <label>列表页标签：</label>
+            <button class="btn" data-clipboard-target="#sourcebox" value="channellist" type="button"> channellistSon </button>
+            <button class="fixed" data-clipboard-text="{if $channel->id == $__CHANNEL__.id}active{else}disabled{/if}" type="button"> Son当前项 </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="pagelist" type="button"> 列表pagelist </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="pagelistimages" type="button"> 列表images </button>
+            <button class="fixed_html" value="list_page" type="button"> 页码HTML </button>
+            <button class="fixed_html" value="wap_list_page" type="button"> 手机页码HTML </button>
+            <button class="fixed_html" value="page_css" type="button"> 页码CSS </button>
+            <button class="fixed" data-clipboard-text="{cms:channellist typeid='2' id='channel'}{$channel.url}{/cms:channellist}" type="button"> 某个栏目URL </button>
+
+            <button class="fixed" data-clipboard-text="{cms:config name='cms.sitename'/}" type="button"> 站点名称 </button>
+            <button class="fixed" data-clipboard-text="{cms:config name='cms.keywords'/}" type="button"> 站点关键字 </button>
+            <button class="fixed" data-clipboard-text="{cms:config name='cms.description'/}" type="button"> 站点描述 </button>
+
+            <button class="fixed" data-clipboard-text="{cms:channel name='name' /}" type="button"> 当前栏目名称 </button>
+            <button class="fixed" data-clipboard-text="{cms:channel name='content' /}" type="button"> 栏目内容 </button>
+            <button class="fixed_html" value="top_channelname" type="button"> TOP栏目名称 </button>
+
+        </div>
+        <div class="controllerRow">
+            <label>详情页标签：</label>
+            <button class="fixed" data-clipboard-text="{cms:archives name='title' /}" type="button"> 文章标题 </button>
+            <button class="fixed" data-clipboard-text="{cms:archives name='fullurl' /}" type="button"> 文章链接 </button>
+            <button class="fixed" data-clipboard-text="{cms:archives name='image' /}" type="button"> 文章缩略图 </button>
+            <button class="fixed_html" value="arc_pubdate" type="button"> 发布时间 </button>
+            <button class="fixed" data-clipboard-text="{cms:archives name='author' /}" type="button"> 作者 </button>
+            <button class="fixed_html" value="arc_editor_name" type="button"> 责任编辑 </button>
+            <button class="fixed" data-clipboard-text="{cms:archives name='description' /}" type="button"> 文章简介 </button>
+            <button class="fixed" data-clipboard-text="{cms:archives name='content' /}" type="button"> 正文内容 </button>
+            <button class="fixed_html" value="arc_click" type="button"> 点击数 </button>
+            <button class="fixed_html" value="arc_tags" type="button"> Tags </button>
+            <button class="fixed" data-clipboard-text="{cms:channellist typeid='$__CHANNEL__.id' id='channel'}{$channel.url}{/cms:channellist}" type="button"> 返回栏目URL </button>
+
+            <button class="fixed_html" value="arc_prev" type="button"> 上一篇HTML </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="articleprev" type="button"> 上一篇Prev </button>
+
+            <button class="fixed_html" value="arc_next" type="button"> 下一篇HTML </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="articlenext" type="button"> 下一篇Next </button>
+
+            <button class="btn" data-clipboard-target="#sourcebox" value="relatearticle" type="button"> relateArticle </button>
+            <button class="btn" data-clipboard-target="#sourcebox" value="archivesimages" type="button"> archivesImages </button>
+
+        </div>
+
+        <div class="controllerRow">
+            <label>其他常用标签：</label>
+            <button class="fixed" data-clipboard-text="{$item.url}" type="button"> 文章url </button>
+            <button class="fixed" data-clipboard-text="{$item.image}" type="button"> 文章缩略图 </button>
+            <button class="fixed" data-clipboard-text="{$item.title}" type="button"> 标题title </button>
+            <button class="fixed_html" value="field_publishtime" type="button"> 日期publishtime </button>
+            <button class="fixed" data-clipboard-text="{$item.description}" type="button"> 描述description </button>
+            <button class="fixed" data-clipboard-text="{cms:config name='cms.indexurl'/}" type="button"> 站点URL </button>
+            <button class="fixed" data-clipboard-text="{$config.qrcode|cdnurl}" type="button"> 微信图片URI </button>
+            <button class="fixed" data-clipboard-text="{$config.wxapp|cdnurl}" type="button"> 小程序图片URI </button>
+            <button class="fixed" data-clipboard-text="{$config.donateimage|cdnurl}" type="button"> 打赏图片URI </button>
+
+            <button class="fixed" data-clipboard-text="{:addon_url('cms/diyform/post', [':diyname'=>'message'])}" type="button"> 留言URL </button>
+            <button class="fixed" data-clipboard-text="{:token()}" type="button"> 留言Token </button>
+            <button class="fixed" data-clipboard-text="row[title]" type="button"> 留言字段 </button>
+
+            <button class="fixed_html" value="message_redirecturl" type="button"> 留言跳转URL </button>
+        </div>
+
+        <div class="controllerRow">
+            <label>文件批量操作：</label>
+            <button value="cmd_remove_bom" type="button"> 去除BOM </button>
+            <button value="cmd_format_html" type="button"> 格式化HTML </button>
+
+            <button value="cmd_replace_fastadmincms" type="button"> 替换头部Fastadmin </button>
+            <button value="cmd_replace_fastadmincms_perfect" type="button"> 完美替换头部 </button>
+            <button value="cmd_replace_fastadmincms_equals" type="button"> 替换公共Equals </button>
+            <button value="cmd_replace_fastadmincms_regular" type="button"> 替换公共Regular </button>
+            <button value="cmd_replace_fastadmincms_closetag" type="button"> 替换公共CloseTag </button>
+            <button value="cmd_replace_telqq" type="button"> 替换电话QQ </button>
+            <button value="cmd_replace_static" type="button"> 替换static </button>
+
+        </div>
+
+        <div class="controllerRow">
+            <label>常用操作功能：</label>
+            <button value="cmd_open_input" type="button"> 打开输入目录 </button>
+            <button value="cmd_open_output" type="button"> 打开输出目录 </button>
+            <button value="cmd_clear_input" type="button"> 清空输入目录 </button>
+            <button value="cmd_clear_output" type="button"> 清空输出目录 </button>
+
+            <button value="cmd_convert_UTF-8_GB2312" type="button"> UTF8转GB2312 </button>
+            <button value="cmd_convert_UTF-8_GBK" type="button"> UTF8转GBK </button>
+            <button value="cmd_convert_GB2312_GBK" type="button"> GB2312转GBK </button>
+            <button value="cmd_convert_GB2312_UTF-8" type="button"> GB2312转UTF8 </button>
+            <button value="cmd_convert_GBK_UTF-8" type="button"> GBK转UTF8 </button>
+            <button value="cmd_convert_GBK_GB2312" type="button"> GBK转GB2312 </button>
+
+        </div>
+    </fieldset>
+
+</form>
+
+
+<!--隐藏资料元素-->
+<div class="hidden_div">
+    <textarea id="fixed_html_jump_wap"><script type="text/javascript">+function(){if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){window.location='/index.php';}}();</script></textarea>
+    <textarea id="fixed_html_index_sql">{cms:query id="item" sql="SELECT * FROM `fa_cms_page` WHERE id = 1"}{$item.content}{/cms:query}</textarea>
+    <textarea id="fixed_html_list_page">
+<div id="Paging">
+    <div class="pager">
+        {cms:pageinfo type="full" /}
+    </div>
+
+    {if $__PAGELIST__->isEmpty()}
+    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+    {/if}
+</div>
+    </textarea>
+    <textarea id="fixed_html_wap_list_page">
+<div id="Paging">
+    {cms:pageinfo type="simple" /}
+
+    {if $__PAGELIST__->isEmpty()}
+    <div class="loadmore loadmore-line loadmore-nodata"><span class="loadmore-tips">暂无数据</span></div>
+    {/if}
+</div>
+    </textarea>
+    <textarea id="fixed_html_field_publishtime">{:date("Y-m-d", $item['publishtime'])}</textarea>
+    <textarea id="fixed_html_arc_pubdate">{cms:archives name='publishtime|datetime' /}</textarea>
+    <textarea id="fixed_html_arc_editor_name">{cms:query id="item" sql="SELECT nickname FROM `fa_admin` WHERE id = ?" bind="$__ARCHIVES__.admin_id"}{$item.nickname}{/cms:query}</textarea>
+    <textarea id="fixed_html_arc_tags">{volist name="$__ARCHIVES__.taglist" id="tag" empty="无"}
+<a href="{$tag.url}" class="tag" rel="tag">{$tag.name}</a>
+{/volist}
+</textarea>
+    <textarea id="fixed_html_arc_click">{cms:archives name='views' /}</textarea>
+    <textarea id="fixed_html_arc_prev">
+{cms:prevnext id="prev" type="prev" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
+<li>
+    <span>{:__('Prev')} &gt;</span>
+    <a href="{$prev.url}">{$prev.title}</a>
+</li>
+{/cms:prevnext}
+    </textarea>
+    <textarea id="fixed_html_arc_next">
+{cms:prevnext id="next" type="next" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
+<li>
+    <span>{:__('Next')} &gt;</span>
+    <a href="{$next.url}">{$next.title}</a>
+</li>
+{/cms:prevnext}
+    </textarea>
+    <textarea id="fixed_html_search_keyword">搜索“<b style="color:red;">{$Think.request.q|default=''|htmlentities}</b>”结果：</textarea>
+    <textarea id="fixed_html_top_channelname">{php} if(0==$__CHANNEL__->parent_id){ $parent_id=$__CHANNEL__->id;}else{ $parent_id=$__CHANNEL__->parent_id;} {/php}
+{cms:channellist typeid='$parent_id' id='channel'}{$channel.name}{/cms:channellist}
+    </textarea>
+    <textarea id="fixed_html_message_redirecturl"><input type="hidden" name="row[redirecturl]" value="referer"></textarea>
+    <textarea id="fixed_html_page_css">
+/*分页页码样式 基础版 Bootstrap S */
+#Paging .pagination {
+	display: inline-block;
+	padding-left: 0;
+	margin: 18px 0;
+	border-radius: 3px;
+}
+#Paging .pagination > li > a,
+#Paging .pagination > li > span {
+	position: relative;
+	float: left;
+	display: inline-block;
+	padding: 6px 12px;
+	line-height: 1.42857143;
+	text-decoration: none;
+	color: #00946f;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	margin-left: -1px;
+}
+#Paging .pagination > li:first-child > a,
+#Paging .pagination > li:first-child > span {
+	margin-left: 0;
+	border-bottom-left-radius: 3px;
+	border-top-left-radius: 3px;
+}
+#Paging .pagination > li > a:hover,
+#Paging .pagination > li > span:hover,
+#Paging .pagination > li > a:focus,
+#Paging .pagination > li > span:focus {
+	z-index: 2;
+	color: #00946f;
+	background-color: #eeeeee;
+	border-color: #ddd;
+}
+#Paging .pagination > .active > a,
+#Paging .pagination > .active > span,
+#Paging .pagination > .active > a:hover,
+#Paging .pagination > .active > span:hover,
+#Paging .pagination > .active > a:focus,
+#Paging .pagination > .active > span:focus {
+	font-size: 14px !important;
+	z-index: 3;
+	color: #fff !important;
+	background-color: #00946f;
+	border-color: #00946f;
+	cursor: default;
+}
+
+#Paging {
+	text-align: center;
+}
+#Paging .pager {
+	margin: 18px 0;
+	list-style: none;
+}
+#Paging .pager:before {
+	content: " ";
+	display: table;
+}
+#Paging .pager .pagination {
+	margin: 0;
+}
+#Paging .pager li {
+	margin: 0 .4em;
+	display: inline-block;
+	width: auto !important;
+	padding: 0;
+	float: none;
+}
+#Paging .pager li > a,
+#Paging .pager li > span {
+	font-size: 14px !important;
+	background: none;
+	color: #00946f;
+	border: 1px solid #00946f;
+	border-radius: 0.25em;
+	padding: .5em .93em;
+	text-decoration: none;
+}
+#Paging .pager li > a:hover,
+#Paging .pager li > a:focus {
+	text-decoration: none;
+	background-color: #00946f;
+	color: #fff;
+}
+#Paging .pager li:first-child > a,
+#Paging .pager li:last-child > a,
+#Paging .pager li:first-child > span,
+#Paging .pager li:last-child > span {
+	padding: .5em 1.2em;
+	font-size: 14px !important;
+}
+#Paging .pager .disabled > a,
+#Paging .pager .disabled > a:hover,
+#Paging .pager .disabled > a:focus,
+#Paging .pager .disabled > span {
+	color: #777;
+	border: 1px solid #777;
+	background-color: #fff;
+	cursor: not-allowed;
+}
+
+#Paging .loadmore-tips{
+	font-size: 14px;
+}
+
+/*手机自适应控制*/
+@media screen and (max-width:767px) {
+	#Paging .pager li{
+		margin: 0 1px;
+	}
+	#Paging .pager li > a,
+	#Paging .pager li > span{
+		font-size: 12px !important;
+		padding: .2em .4em;
+	}
+	#Paging .pager li:first-child > a,
+	#Paging .pager li:last-child > a,
+	#Paging .pager li:first-child > span,
+	#Paging .pager li:last-child > span {
+		font-size: 12px !important;
+		padding: .2em .4em;
+	}
+	#Paging .pagination > .active > a,
+	#Paging .pagination > .active > span,
+	#Paging .pagination > .active > a:hover,
+	#Paging .pagination > .active > span:hover,
+	#Paging .pagination > .active > a:focus,
+	#Paging .pagination > .active > span:focus,
+	#Paging .loadmore-tips{
+		font-size: 12px !important;
+	}
+
+}
+/*分页页码样式 E */
+    </textarea>
+</div>
+</body>
+</html>
