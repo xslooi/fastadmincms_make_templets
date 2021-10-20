@@ -73,9 +73,10 @@
              <button class="fixed_html" value="jump_wap" type="button"> 跳转手机JS </button>
             <button class="fixed" data-clipboard-text="{$i}" type="button"> 从1递增 </button>
             <button class="fixed" data-clipboard-text="{php}echo $i-1;{/php}" type="button"> 从0递增 </button>
-            <button class="fixed" data-clipboard-text="{if 1==$i}active{/if}" type="button"> 递增第一属性 </button>
-            <button class="fixed" data-clipboard-text="{if 1!=$i && 0==($i-1)%2}odd{else}even{/if}" type="button"> 递增求余属性 </button>
+            <button class="fixed" data-clipboard-text="{if 1==$i}active{/if}" type="button"> 递增第一 </button>
+            <button class="fixed" data-clipboard-text="{if 1!=$i && 0==($i-1)%2}odd{else}even{/if}" type="button"> 递增求余 </button>
             <button class="fixed" data-clipboard-text="http://beian.miit.gov.cn" type="button"> 备案网址 </button>
+            <button class="fixed" data-clipboard-text="{if !isset($__CHANNEL__)}active{/if}" type="button"> 首页属性 </button>
 
         </div>
         <div class="controllerRow">
@@ -146,21 +147,23 @@
 
         <div class="controllerRow">
             <label>其他常用标签：</label>
-            <button class="fixed" data-clipboard-text="{$item.url}" type="button"> 文章url </button>
-            <button class="fixed" data-clipboard-text="{$item.image}" type="button"> 文章缩略图 </button>
+            <button class="fixed" data-clipboard-text="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" type="button"> 文章url </button>
+            <button class="fixed" data-clipboard-text="{$item.image}" type="button"> 文章image </button>
             <button class="fixed" data-clipboard-text="{$item.title}" type="button"> 标题title </button>
             <button class="fixed_html" value="field_publishtime" type="button"> 日期publishtime </button>
             <button class="fixed" data-clipboard-text="{$item.description}" type="button"> 描述description </button>
+            <button class="fixed" data-clipboard-text="{:mb_substr(strip_tags($item.content), 0, 200)}" type="button"> 列表content </button>
             <button class="fixed" data-clipboard-text="{cms:config name='cms.indexurl'/}" type="button"> 站点URL </button>
             <button class="fixed" data-clipboard-text="{$config.qrcode|cdnurl}" type="button"> 微信图片URI </button>
             <button class="fixed" data-clipboard-text="{$config.wxapp|cdnurl}" type="button"> 小程序图片URI </button>
             <button class="fixed" data-clipboard-text="{$config.donateimage|cdnurl}" type="button"> 打赏图片URI </button>
 
-            <button class="fixed" data-clipboard-text="{:addon_url('cms/diyform/post', [':diyname'=>'message'])}" type="button"> 留言URL </button>
+            <button class="fixed" data-clipboard-text="{:addon_url('cms/diyform/post', [':diyname'=>'guestbook'])}" type="button"> 留言URL </button>
             <button class="fixed" data-clipboard-text="{:token()}" type="button"> 留言Token </button>
-            <button class="fixed" data-clipboard-text="row[title]" type="button"> 留言字段 </button>
 
             <button class="fixed_html" value="message_redirecturl" type="button"> 留言跳转URL </button>
+
+            <button class="fixed" data-clipboard-text="row[title]" type="button"> 留言字段 </button>
         </div>
 
         <div class="controllerRow">
@@ -231,7 +234,7 @@
 </textarea>
     <textarea id="fixed_html_arc_click">{cms:archives name='views' /}</textarea>
     <textarea id="fixed_html_arc_prev">
-{cms:prevnext id="prev" type="prev" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
+{cms:prevnext id="prev" empty="<a>没有了</a>" type="prev" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
 <li>
     <span>{:__('Prev')} &gt;</span>
     <a href="{$prev.url}">{$prev.title}</a>
@@ -239,7 +242,7 @@
 {/cms:prevnext}
     </textarea>
     <textarea id="fixed_html_arc_next">
-{cms:prevnext id="next" type="next" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
+{cms:prevnext id="next" empty="<a>没有了</a>" type="next" archives="__ARCHIVES__.id" channel="__CHANNEL__.id"}
 <li>
     <span>{:__('Next')} &gt;</span>
     <a href="{$next.url}">{$next.title}</a>
@@ -302,6 +305,8 @@
 }
 
 #Paging {
+	width: 100%;
+	overflow: hidden;
 	text-align: center;
 }
 #Paging .pager {
@@ -368,6 +373,8 @@
 	#Paging .pager li > span{
 		font-size: 12px !important;
 		padding: .2em .4em;
+        height: 18px;
+        line-height: 18px;
 	}
 	#Paging .pager li:first-child > a,
 	#Paging .pager li:last-child > a,

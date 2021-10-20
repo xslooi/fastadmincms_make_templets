@@ -421,7 +421,7 @@ function format_pc($tag_name, $source_code){
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$item.url}" title="{$item.title}" target="_blank"',
+                    'replace' => ' href="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" title="{$item.title}" target="_blank"',
                     ),
                 'img' =>
                     array(
@@ -441,7 +441,7 @@ function format_pc($tag_name, $source_code){
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$item.url}" title="{$item.title}" target="_blank"',
+                    'replace' => ' href="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" title="{$item.title}" target="_blank"',
                 ),
                 'img' =>
                     array(
@@ -542,20 +542,20 @@ function format_pc($tag_name, $source_code){
         ),
 
         'blocklist_images' => array(
-            'tag_start' => "{cms:blocklist id=\"block\" name=\"pcbanner\" row=\"10\"}",
+            'tag_start' => "{cms:blocklist id=\"block\" name=\"pcbanner\" row=\"10\" orderby=\"weigh\" orderway=\"asc\"}",
             'tag_end' => "{/cms:blocklist}",
-            'inner_title' => '{$block.name}',
-            'inner_text' => '{$block.name}',
+            'inner_title' => '{$block.title}',
+            'inner_text' => '{$block.title}',
             'inner_img' => '{$block.image}',
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$block.url}" title="{$block.name}"',
+                    'replace' => ' href="{$block.url}" title="{$block.title}"',
                 ),
                 'img' =>
                     array(
                         'attrs' => 'src|alt|title',
-                        'replace' => ' src="{$block.image}" alt="{$block.name}" title="{$block.name}"',
+                        'replace' => ' src="{$block.image}" alt="{$block.title}" title="{$block.title}"',
                     ),
             ),
         ),
@@ -583,7 +583,7 @@ function format_pc($tag_name, $source_code){
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$item.url}" title="{$item.title}" target="_blank"',
+                    'replace' => ' href="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" title="{$item.title}" target="_blank"',
                 ),
                 'img' =>
                     array(
@@ -648,7 +648,7 @@ function format_pc($tag_name, $source_code){
         ),
 
         'articleprev' => array(
-            'tag_start' => "{cms:prevnext id=\"prev\" empty=\"没有了\" type=\"prev\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
+            'tag_start' => "{cms:prevnext id=\"prev\" empty=\"<a>没有了</a>\" type=\"prev\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
             'tag_end' => "{/cms:prevnext}",
             'inner_title' => '{$prev.title}',
             'inner_text' => '{$prev.title}',
@@ -661,7 +661,7 @@ function format_pc($tag_name, $source_code){
         ),
 
         'articlenext' => array(
-            'tag_start' => "{cms:prevnext id=\"next\" empty=\"没有了\" type=\"next\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
+            'tag_start' => "{cms:prevnext id=\"next\" empty=\"<a>没有了</a>\" type=\"next\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
             'tag_end' => "{/cms:prevnext}",
             'inner_title' => '{$next.title}',
             'inner_text' => '{$next.title}',
@@ -711,7 +711,7 @@ function format_wap($tag_name, $source_code){
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$item.url}" title="{$item.title}"',
+                    'replace' => ' href="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" title="{$item.title}"',
                 ),
                 'img' =>
                     array(
@@ -731,7 +731,7 @@ function format_wap($tag_name, $source_code){
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$item.url}" title="{$item.title}"',
+                    'replace' => ' href="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" title="{$item.title}"',
                 ),
                 'img' =>
                     array(
@@ -834,18 +834,18 @@ function format_wap($tag_name, $source_code){
         'blocklist_images' => array(
             'tag_start' => "{cms:blocklist id=\"block\" name=\"pcbanner\" row=\"10\" orderby=\"weigh\" orderway=\"asc\"}",
             'tag_end' => "{/cms:blocklist}",
-            'inner_title' => '{$block.name}',
-            'inner_text' => '{$block.name}',
+            'inner_title' => '{$block.title}',
+            'inner_text' => '{$block.title}',
             'inner_img' => '{$block.image}',
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$block.url}" title="{$block.name}"',
+                    'replace' => ' href="{$block.url}" title="{$block.title}"',
                 ),
                 'img' =>
                     array(
                         'attrs' => 'src|alt|title',
-                        'replace' => ' src="{$block.image}" alt="{$block.name}" title="{$block.name}"',
+                        'replace' => ' src="{$block.image}" alt="{$block.title}" title="{$block.title}"',
                     ),
             ),
         ),
@@ -873,7 +873,7 @@ function format_wap($tag_name, $source_code){
             'inner_tags' => array(
                 'a' => array(
                     'attrs' => 'href|title|target',
-                    'replace' => ' href="{$item.url}" title="{$item.title}"',
+                    'replace' => ' href="{if $item.outlink}{$item.outlink}{else}{$item.url}{/if}" title="{$item.title}"',
                 ),
                 'img' =>
                     array(
@@ -938,7 +938,7 @@ function format_wap($tag_name, $source_code){
         ),
 
         'articleprev' => array(
-            'tag_start' => "{cms:prevnext id=\"prev\" empty=\"没有了\" type=\"prev\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
+            'tag_start' => "{cms:prevnext id=\"prev\" empty=\"<a>没有了</a>\" type=\"prev\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
             'tag_end' => "{/cms:prevnext}",
             'inner_title' => '{$prev.title}',
             'inner_text' => '{$prev.title}',
@@ -951,7 +951,7 @@ function format_wap($tag_name, $source_code){
         ),
 
         'articlenext' => array(
-            'tag_start' => "{cms:prevnext id=\"next\" empty=\"没有了\" type=\"next\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
+            'tag_start' => "{cms:prevnext id=\"next\" empty=\"<a>没有了</a>\" type=\"next\" archives=\"__ARCHIVES__.id\" channel=\"__CHANNEL__.id\"}",
             'tag_end' => "{/cms:prevnext}",
             'inner_title' => '{$next.title}',
             'inner_text' => '{$next.title}',
